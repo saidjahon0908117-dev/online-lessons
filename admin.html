@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#0b1020;color:#eef1fa;min-height:100vh}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:22px;margin-bottom:18px;background:linear-gradient(90deg,#fff,#e8c46a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{background:#141a30;border:1px solid #232b4a;border-radius:16px;padding:18px;margin-bottom:16px}
+input,select,textarea,button{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:11px 13px;margin-bottom:10px;background:#0b1020;border:1px solid #2a3358;border-radius:10px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#e8c46a}
+button{padding:11px 18px;border:0;border-radius:10px;background:linear-gradient(135deg,#e8c46a,#b8862b);color:#1a1204;font-weight:700;cursor:pointer}
+button.del{background:#3a1f2b;color:#ff8f9f;padding:7px 12px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:#141a30;border:1px solid #232b4a;border-radius:16px;padding:16px;text-align:center}
+.stat b{display:block;font-size:30px;color:#e8c46a}
+.stat span{font-size:12px;color:#9aa3bd}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tabs button{background:#141a30;color:#9aa3bd;border:1px solid #232b4a}
+.tabs button.on{background:linear-gradient(135deg,#e8c46a,#b8862b);color:#1a1204}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 8px;text-align:left;border-bottom:1px solid #232b4a}
+th{color:#9aa3bd;font-weight:500;font-size:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #232b4a}
+.row small{color:#9aa3bd;display:block;margin-top:3px}
+.hide{display:none}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="login" class="card" style="max-width:380px;margin:80px auto">
+    <h1>🔐 Admin panel</h1>
+    <input id="pw" type="password" placeholder="Parol" onkeydown="if(event.key==='Enter')enter()">
+    <button onclick="enter()" style="width:100%">Kirish</button>
+  </div>
+
+  <div id="main" class="hide">
+    <h1>🎓 Jasurbek Isaev IELTS — Admin panel</h1>
+    <div class="stats">
+      <div class="stat"><b id="s-total">0</b><span>Jami o'quvchilar</span></div>
+      <div class="stat"><b id="s-week">0</b><span>So'nggi 7 kun</span></div>
+      <div class="stat"><b id="s-les">0</b><span>Darslar soni</span></div>
+    </div>
+    <div class="tabs">
+      <button class="on" onclick="tab('add',this)">➕ Dars qo'shish</button>
+      <button onclick="tab('lessons',this)">🎬 Darslar</button>
+      <button onclick="tab('users',this)">👥 O'quvchilar</button>
+      <button onclick="tab('bc',this)">📢 Xabar yuborish</button>
+    </div>
+
+    <div id="t-add" class="card">
+      <select id="sec" onchange="fillSub()">
+        <option value="writing">Writing lessons</option>
+        <option value="reading">Reading lessons</option>
+        <option value="listening">Listening lessons</option>
+      </select>
+      <select id="sub"></select>
+      <input id="title" placeholder="Dars nomi (masalan: Task 1 — Line graph)">
+      <input id="url" placeholder="Video havola (YouTube yoki .mp4 to'g'ridan-to'g'ri link)">
+      <textarea id="desc" rows="3" placeholder="Izoh (ixtiyoriy)"></textarea>
+      <button onclick="addLesson()">Qo'shish</button>
+      <p style="margin-top:12px;font-size:12px;color:#9aa3bd">💡 Tavsiya: videoni YouTube'ga <b>Unlisted</b> qilib yuklang va havolasini shu yerga joylang.</p>
+    </div>
+
+    <div id="t-lessons" class="card hide"><div id="l-list"></div></div>
+    <div id="t-users" class="card hide"><div class="scroll"><table><thead><tr><th>#</th><th>Ism familiya</th><th>Telefon</th><th>Username</th><th>Sana</th></tr></thead><tbody id="u-body"></tbody></table></div></div>
+    <div id="t-bc" class="card hide">
+      <textarea id="bc-text" rows="5" placeholder="Barcha o'quvchilarga yuboriladigan xabar..."></textarea>
+      <button onclick="broadcast()">Yuborish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let PW = sessionStorage.getItem('apw') || '';
+const SUBS = { writing:[['task1','Task 1 lessons'],['task2','Task 2 lessons']], reading:[['','Reading lessons']], listening:[['','Listening lessons']] };
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(p, method='GET', body){
+  const r = await fetch(p,{method,headers:{'Content-Type':'application/json','x-admin-password':PW},body:body?JSON.stringify(body):undefined});
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error||'Xatolik');
+  return j;
+}
+async function enter(){
+  PW = document.getElementById('pw').value || PW;
+  try{ await api('/api/admin/stats'); sessionStorage.setItem('apw',PW);
+    login.classList.add('hide'); main.classList.remove('hide'); fillSub(); load();
+  }catch(e){ alert(e.message); }
+}
+async function load(){
+  const s = await api('/api/admin/stats');
+  document.getElementById('s-total').textContent=s.total; document.getElementById('s-week').textContent=s.week; document.getElementById('s-les').textContent=s.lessons;
+  const users = await api('/api/admin/users');
+  document.getElementById('u-body').innerHTML = users.map((u,i)=>`<tr><td>${i+1}</td><td>${esc(u.fullName)}</td><td>${esc(u.phone)}</td><td>${u.username?'@'+esc(u.username):'—'}</td><td>${new Date(u.registeredAt).toLocaleDateString('uz')}</td></tr>`).join('') || '<tr><td colspan="5">Hali o\'quvchi yo\'q</td></tr>';
+  const ls = await api('/api/admin/lessons');
+  document.getElementById('l-list').innerHTML = ls.map(l=>`<div class="row"><div><b>${esc(l.title)}</b><small>${esc(l.section)} ${l.sub?'· '+esc(l.sub):''}</small></div><button class="del" onclick="delLesson('${l._id}')">O'chirish</button></div>`).join('') || 'Darslar yo\'q';
+}
+function fillSub(){ sub.innerHTML = SUBS[sec.value].map(([v,t])=>`<option value="${v}">${t}</option>`).join(''); }
+function tab(n,btn){
+  ['add','lessons','users','bc'].forEach(x=>document.getElementById('t-'+x).classList.toggle('hide',x!==n));
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+}
+async function addLesson(){
+  try{
+    await api('/api/admin/lessons','POST',{section:sec.value,sub:sub.value,title:title.value,videoUrl:url.value,description:desc.value});
+    title.value=url.value=desc.value=''; alert('✅ Dars qo\'shildi'); load();
+  }catch(e){ alert(e.message); }
+}
+async function delLesson(id){ if(!confirm('O\'chirilsinmi?'))return; await api('/api/admin/lessons/'+id,'DELETE'); load(); }
+async function broadcast(){
+  const t = document.getElementById('bc-text').value.trim(); if(!t||!confirm('Hammaga yuborilsinmi?'))return;
+  try{ const r = await api('/api/admin/broadcast','POST',{text:t}); alert(`Yuborildi: ${r.sent}/${r.total}`); document.getElementById('bc-text').value=''; }catch(e){ alert(e.message); }
+}
+if(PW) enter();
+</script>
+</body>
+</html>

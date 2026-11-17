@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Jasurbek Isaev IELTS Academy</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b16;--card:rgba(255,255,255,.055);--line:rgba(255,255,255,.1);--gold:#e8c46a;--gold2:#b8862b;--txt:#f2f4fa;--mut:#9aa3bd;--blue:#5b8cff;--vio:#8b5cf6}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;width:340px;height:340px;border-radius:50%;filter:blur(90px);z-index:-1;opacity:.35}
+body::before{background:var(--vio);top:-100px;left:-100px}
+body::after{background:var(--gold2);bottom:-120px;right:-100px;opacity:.25}
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+.serif{font-family:'Playfair Display',serif}
+/* Hero */
+.hero{position:relative;text-align:center;padding:26px 18px 22px;border-radius:28px;background:linear-gradient(160deg,rgba(139,92,246,.22),rgba(232,196,106,.1));border:1px solid var(--line);overflow:hidden;animation:up .6s both}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(232,196,106,.18),transparent 60%)}
+.avatar{position:relative;width:128px;height:128px;margin:0 auto 14px;border-radius:50%;padding:4px;background:conic-gradient(from 0deg,var(--gold),var(--vio),var(--blue),var(--gold));animation:spin 8s linear infinite}
+.avatar-in{width:100%;height:100%;border-radius:50%;background:#0d1224 center/cover;animation:spin 8s linear infinite reverse;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--gold);overflow:hidden}
+.avatar-in img{width:100%;height:100%;object-fit:cover}
+.hero h1{position:relative;font-size:27px;line-height:1.15;background:linear-gradient(90deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .role{position:relative;margin-top:6px;color:var(--gold);font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
+.hero p{position:relative;margin-top:10px;color:var(--mut);font-size:13.5px}
+.badges{position:relative;display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.badge{padding:6px 12px;border-radius:30px;background:rgba(255,255,255,.07);border:1px solid var(--line);font-size:11.5px;font-weight:600}
+.hello{margin:22px 4px 12px;font-size:13px;color:var(--mut)}
+.hello b{color:var(--txt)}
+/* Cards */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{position:relative;padding:18px 14px 16px;border-radius:22px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(12px);cursor:pointer;overflow:hidden;transition:.2s;animation:up .6s both;min-height:150px;display:flex;flex-direction:column}
+.tile:active{transform:scale(.96)}
+.tile::after{content:"";position:absolute;right:-30px;top:-30px;width:100px;height:100px;border-radius:50%;background:var(--c);opacity:.22;filter:blur(20px)}
+.ico{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,var(--c),rgba(255,255,255,.1));box-shadow:0 8px 20px -6px var(--c)}
+.tile h3{margin-top:auto;padding-top:14px;font-size:16px;font-weight:700}
+.tile small{color:var(--mut);font-size:12px;margin-top:2px}
+.list-item{display:flex;align-items:center;gap:14px;padding:15px;margin-bottom:10px;border-radius:18px;background:var(--card);border:1px solid var(--line);cursor:pointer;animation:up .45s both}
+.list-item:active{transform:scale(.98)}
+.list-item .n{width:42px;height:42px;border-radius:13px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1204}
+.list-item .t{flex:1;font-weight:600;font-size:14.5px}
+.list-item .t small{display:block;font-weight:400;color:var(--mut);font-size:12px;margin-top:3px}
+.arrow{color:var(--gold);font-size:20px}
+.title{font-size:24px;margin:6px 2px 4px}
+.sub{color:var(--mut);font-size:13px;margin:0 2px 18px}
+.empty{text-align:center;color:var(--mut);padding:50px 20px;border:1px dashed var(--line);border-radius:20px}
+.empty div{font-size:40px;margin-bottom:8px}
+/* Player */
+.player{border-radius:20px;overflow:hidden;background:#000;border:1px solid var(--line);aspect-ratio:16/9;box-shadow:0 20px 50px -15px #000}
+.player iframe,.player video{width:100%;height:100%;border:0}
+.desc{margin-top:16px;padding:16px;border-radius:18px;background:var(--card);border:1px solid var(--line);color:#cdd3e6;font-size:14px;line-height:1.55;white-space:pre-wrap}
+/* Speaking */
+.acc{margin-bottom:10px;border-radius:18px;background:var(--card);border:1px solid var(--line);overflow:hidden}
+.acc-h{padding:15px;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14.5px;cursor:pointer}
+.acc-h span{color:var(--gold);transition:.2s}
+.acc.open .acc-h span{transform:rotate(90deg)}
+.acc-b{display:none;padding:0 15px 14px}
+.acc.open .acc-b{display:block}
+.q{padding:10px 0;border-top:1px solid var(--line);font-size:13.8px;color:#d8ddee;line-height:1.5}
+.q i{color:var(--gold);font-style:normal;font-weight:700;margin-right:6px}
+.cue{padding:12px;margin-top:6px;border-radius:12px;background:rgba(232,196,106,.08);border:1px solid rgba(232,196,106,.25);font-size:13.5px;line-height:1.6}
+.loader{display:flex;justify-content:center;padding:40px}
+.loader div{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--gold);animation:spin 1s linear infinite}
+.err{padding:30px 20px;text-align:center;color:#ff9a9a}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready(); tg.expand();
+try{ tg.setHeaderColor('#070b16'); tg.setBackgroundColor('#070b16'); }catch(e){}
+
+const $app = document.getElementById('app');
+const user = tg.initDataUnsafe?.user;
+let stack = [];
+let counts = {};
+
+/* ─── IELTS Speaking savollari ─── */
+const SPEAKING = {
+  part1: [
+    ['Work / Studies', ['Do you work or are you a student?','Why did you choose that job / subject?','What do you like most about your work / studies?','Is there anything you dislike about it?','Would you like to change your job / major in the future?']],
+    ['Hometown', ['Where is your hometown?','What do you like about your hometown?','Has your hometown changed much in recent years?','Would you like to live there in the future?','Is it a good place for young people?']],
+    ['Home / Accommodation', ['Do you live in a house or an apartment?','What is your favourite room in your home?','How long have you lived there?','Would you like to move to a different home?','How could you make your home more comfortable?']],
+    ['Hobbies & Free time', ['What do you do in your free time?','Do you prefer spending time alone or with others?','Has your hobby changed since you were a child?','Is there a hobby you would like to try?','How much free time do you have every week?']],
+    ['Food & Cooking', ['What is your favourite food?','Do you enjoy cooking?','Do you prefer eating at home or in restaurants?','Has your diet changed in recent years?','What food is typical in your country?']],
+    ['Technology & Phones', ['How often do you use your phone?','What do you mostly use it for?','Do you think people use phones too much?','What app could you not live without?','How has technology changed your daily life?']],
+    ['Weather & Seasons', ['What is the weather like in your hometown?','What is your favourite season?','Does weather affect your mood?','Do you prefer hot or cold weather?','What do you do on rainy days?']],
+    ['Music', ['What kind of music do you like?','Do you play any musical instrument?','Do you listen to music when you study?','Did you learn music at school?','Has your taste in music changed over time?']],
+    ['Travel & Transport', ['How do you usually get around your city?','Do you like travelling by public transport?','Is traffic a problem in your city?','What is your favourite way to travel?','Would you like to travel more?']],
+    ['Friends', ['Do you have many friends?','How often do you see your friends?','What do you usually do together?','Do you prefer a few close friends or many friends?','Are your friends similar to you?']],
+    ['Daily Routine & Sleep', ['What is your daily routine like?','What part of the day do you like best?','Do you prefer to get up early or late?','Do you take naps in the afternoon?','Would you like to change your routine?']],
+    ['Reading & Books', ['Do you enjoy reading?','What kind of books do you like?','Do you prefer paper books or e-books?','Did you read a lot as a child?','Do you think reading is important?']],
+  ],
+  part2: [
+    ['Describe a person who has influenced you','You should say:\n• who this person is\n• how you know him / her\n• what he / she did\n• and explain how this person influenced you'],
+    ['Describe a place you visited and liked','You should say:\n• where it is\n• when you went there\n• what you did there\n• and explain why you liked it'],
+    ['Describe a book you enjoyed reading','You should say:\n• what the book is\n• what it is about\n• why you read it\n• and explain why you enjoyed it'],
+    ['Describe a time when you helped someone','You should say:\n• who you helped\n• how you helped\n• why this person needed help\n• and explain how you felt about it'],
+    ['Describe a skill you learned recently','You should say:\n• what the skill is\n• how you learned it\n• who or what helped you\n• and explain why it is useful'],
+    ['Describe a memorable meal you had','You should say:\n• where you had it\n• who you were with\n• what you ate\n• and explain why it was memorable'],
+    ['Describe a piece of technology you use often','You should say:\n• what it is\n• how often you use it\n• what you use it for\n• and explain why it is important to you'],
+    ['Describe a time you were late','You should say:\n• when it happened\n• where you were going\n• why you were late\n• and explain how you felt'],
+    ['Describe a successful person you know','You should say:\n• who this person is\n• how you know him / her\n• what he / she has achieved\n• and explain why you think he / she is successful'],
+    ['Describe an event you would like to attend','You should say:\n• what the event is\n• where it takes place\n• who you would go with\n• and explain why you want to attend it'],
+    ['Describe your favourite teacher','You should say:\n• who the teacher was\n• what subject he / she taught\n• what he / she was like\n• and explain why you liked him / her'],
+    ['Describe a gift you gave to someone','You should say:\n• what the gift was\n• who you gave it to\n• why you chose it\n• and explain how the person reacted'],
+  ],
+  part3: [
+    ['Education & Teachers', ['What qualities make a good teacher?','Should students be allowed to choose all their subjects?','How has education changed in the last few decades?','Is online learning as effective as classroom learning?','What is more important: academic results or practical skills?']],
+    ['Technology & Society', ['Do you think technology makes people more isolated?','What are the dangers of relying on technology too much?','How will technology change jobs in the future?','Should children have limited screen time?','Is social media good or bad for society?']],
+    ['Work & Success', ['What does success mean to different generations?','Is money the most important factor when choosing a job?','Should people change careers during their life?','How important is work-life balance?','Do you think university degrees are still necessary?']],
+    ['Environment', ['What are the biggest environmental problems today?','Who is more responsible for protecting the environment: individuals or governments?','Should plastic be banned?','How can cities become greener?','Do people care enough about the environment?']],
+    ['Travel & Tourism', ['What are the benefits of travelling abroad?','Does tourism harm local cultures?','Why do some people prefer holidays at home?','How has travel changed over the years?','Should governments limit the number of tourists?']],
+    ['Family & Society', ['How have family roles changed in recent years?','Is it better to live with extended family?','What is the best way to raise a child?','Do older people have a role in modern society?','Why do some young people leave their hometowns?']],
+    ['Health & Lifestyle', ['Why do many people find it hard to stay healthy?','Should governments tax unhealthy food?','Is mental health taken seriously enough?','Do people exercise enough nowadays?','How can workplaces promote healthy living?']],
+    ['Media & Advertising', ['How does advertising influence people?','Do you trust news on social media?','Should there be limits on advertising to children?','Why do people follow celebrities?','How has the way people get news changed?']],
+  ],
+};
+
+/* ─── Yordamchilar ─── */
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(path){
+  const r = await fetch(path, { headers: { 'x-init-data': tg.initData } });
+  if(!r.ok) throw new Error((await r.json().catch(()=>({}))).error || 'Xatolik');
+  return r.json();
+}
+function ytEmbed(url){
+  const m = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+  return m ? `https://www.youtube.com/embed/${m[1]}?rel=0&modestbranding=1` : null;
+}
+function playerHTML(url){
+  const y = ytEmbed(url);
+  if(y) return `<iframe src="${y}" allow="accelerometer;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe>`;
+  if(/\.(mp4|webm|mov|m4v)(\?|$)/i.test(url)) return `<video src="${esc(url)}" controls playsinline controlsList="nodownload"></video>`;
+  return `<iframe src="${esc(url)}" allow="autoplay;fullscreen" allowfullscreen></iframe>`;
+}
+const cnt = (s,t='') => (counts[s+'|'+t] || 0);
+
+/* ─── Navigatsiya ─── */
+function go(fn){ stack.push(fn); fn(); sync(); window.scrollTo(0,0); }
+function back(){ stack.pop(); (stack[stack.length-1] || home)(); sync(); window.scrollTo(0,0); }
+function sync(){ stack.length ? tg.BackButton.show() : tg.BackButton.hide(); }
+tg.BackButton.onClick(back);
+
+/* ─── Ekranlar ─── */
+function home(){
+  const name = user ? esc(user.first_name) : "o'quvchi";
+  const sections = [
+    ['writing','✍️','Writing lessons','#5b8cff', () => cnt('writing','task1')+cnt('writing','task2')],
+    ['reading','📖','Reading lessons','#22c55e', () => cnt('reading')],
+    ['listening','🎧','Listening lessons','#f59e0b', () => cnt('listening')],
+    ['speaking','🎤','Speaking lessons','#ec4899', () => null],
+  ];
+  $app.innerHTML = `
+    <div class="hero">
+      <div class="avatar"><div class="avatar-in"><img src="/teacher.jpg" alt="Jasurbek Isaev" onerror="this.replaceWith(document.createTextNode('JI'))"></div></div>
+      <h1 class="serif">Jasurbek Isaev</h1>
+      <div class="role">IELTS Instructor</div>
+      <p>Professional IELTS video darslari — bir joyda, mukammal tizimda</p>
+      <div class="badges"><span class="badge">🏆 Premium kurs</span><span class="badge">🎬 Video darslar</span><span class="badge">📚 4 ta bo'lim</span></div>
+    </div>
+    <div class="hello">Salom, <b>${name}</b> 👋 Bo'limni tanlang:</div>
+    <div class="grid">${sections.map(([k,i,t,c,f],idx)=>{
+      const n = f(); const s = n===null ? 'Part 1 · 2 · 3' : n+' ta dars';
+      return `<div class="tile" style="--c:${c};animation-delay:${.1+idx*.08}s" onclick="openSection('${k}')"><div class="ico">${i}</div><h3>${t}</h3><small>${s}</small></div>`}).join('')}
+    </div>`;
+}
+
+function openSection(k){
+  if(k==='writing') return go(writingMenu);
+  if(k==='speaking') return go(speakingMenu);
+  go(() => lessonList(k,'', k==='reading'?'Reading lessons':'Listening lessons'));
+}
+
+function menu(title, sub, items){
+  $app.innerHTML = `<h2 class="title serif">${title}</h2><p class="sub">${sub}</p>` +
+    items.map(([ico,t,s,fn],i)=>`<div class="list-item" style="animation-delay:${i*.07}s" data-i="${i}"><div class="n">${ico}</div><div class="t">${t}<small>${s}</small></div><div class="arrow">›</div></div>`).join('');
+  $app.querySelectorAll('.list-item').forEach(el => el.onclick = () => items[el.dataset.i][3]());
+}
+
+function writingMenu(){
+  menu('Writing lessons','Task turini tanlang',[
+    ['1','Task 1 lessons',cnt('writing','task1')+' ta dars · Grafik, diagramma, xat',()=>go(()=>lessonList('writing','task1','Task 1 lessons'))],
+    ['2','Task 2 lessons',cnt('writing','task2')+' ta dars · Essay yozish',()=>go(()=>lessonList('writing','task2','Task 2 lessons'))],
+  ]);
+}
+function speakingMenu(){
+  menu('Speaking lessons','Part ni tanlang',[
+    ['1','Part 1 savollari','12 ta mavzu · Kundalik savollar',()=>go(()=>spPart(1))],
+    ['2','Part 2 savollari','12 ta cue card · Monolog',()=>go(()=>spPart(2))],
+    ['3','Part 3 savollari','8 ta mavzu · Muhokama',()=>go(()=>spPart(3))],
+  ]);
+}
+
+function spPart(p){
+  const data = SPEAKING['part'+p];
+  const head = `<h2 class="title serif">Part ${p} savollari</h2><p class="sub">${p===2?'Cue card tanlang — 1 daqiqa tayyorlanib, 2 daqiqa gapiring':'Mavzuni oching va javob mashq qiling'}</p>`;
+  const body = data.map(([t,c],i)=>{
+    const inner = p===2
+      ? `<div class="cue">${esc(c).replace(/\n/g,'<br>')}</div>`
+      : c.map((q,j)=>`<div class="q"><i>${j+1}.</i>${esc(q)}</div>`).join('');
+    return `<div class="acc" style="animation:up .4s ${i*.03}s both"><div class="acc-h" onclick="this.parentNode.classList.toggle('open')">${i+1}. ${esc(t)}<span>›</span></div><div class="acc-b">${inner}</div></div>`;
+  }).join('');
+  $app.innerHTML = head + body;
+}
+
+async function lessonList(section, sub, title){
+  $app.innerHTML = `<h2 class="title serif">${title}</h2><p class="sub">Darsni tanlang</p><div class="loader"><div></div></div>`;
+  try{
+    const list = await api(`/api/lessons?section=${section}&sub=${sub}`);
+    const html = list.length
+      ? list.map((l,i)=>`<div class="list-item" style="animation-delay:${i*.05}s" data-i="${i}"><div class="n">${i+1}</div><div class="t">${esc(l.title)}<small>▶ Video dars</small></div><div class="arrow">›</div></div>`).join('')
+      : `<div class="empty"><div>🎬</div>Hozircha darslar qo'shilmagan.<br>Tez orada yangi darslar chiqadi!</div>`;
+    $app.innerHTML = `<h2 class="title serif">${title}</h2><p class="sub">${list.length} ta video dars</p>` + html;
+    $app.querySelectorAll('.list-item').forEach(el => el.onclick = () => go(() => lessonView(list[el.dataset.i])));
+  }catch(e){ $app.innerHTML = `<div class="err">⚠️ ${esc(e.message)}</div>`; }
+}
+
+function lessonView(l){
+  $app.innerHTML = `<h2 class="title serif" style="font-size:21px;margin-bottom:14px">${esc(l.title)}</h2>
+    <div class="player">${playerHTML(l.videoUrl)}</div>
+    ${l.description ? `<div class="desc">${esc(l.description)}</div>` : ''}`;
+}
+
+/* ─── Start ─── */
+(async () => {
+  if(!tg.initData){
+    $app.innerHTML = `<div class="err">Bu sahifa faqat Telegram ichida ochiladi.</div>`; return;
+  }
+  home();
+  try{
+    (await api('/api/counts')).forEach(c => counts[c.section+'|'+(c.sub||'')] = c.n);
+    if(!stack.length) home();
+  }catch(e){ $app.innerHTML = `<div class="err">⚠️ ${esc(e.message)}<br><br>Botga qaytib /start bosing.</div>`; }
+})();
+</script>
+</body>
+</html>
