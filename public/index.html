@@ -135,6 +135,8 @@ function ytEmbed(url){
 }
 function playerHTML(url){
   const y = ytEmbed(url);
+  if(y) return ...
+  const y = ytEmbed(url);
   if(y) return `<iframe src="${y}" allow="accelerometer;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe>`;
   if(/\.(mp4|webm|mov|m4v)(\?|$)/i.test(url)) return `<video src="${esc(url)}" controls playsinline controlsList="nodownload"></video>`;
   return `<iframe src="${esc(url)}" allow="autoplay;fullscreen" allowfullscreen></iframe>`;
