@@ -129,18 +129,26 @@ async function api(path){
   if(!r.ok) throw new Error((await r.json().catch(()=>({}))).error || 'Xatolik');
   return r.json();
 }
+
 function ytEmbed(url){
   const m = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
   return m ? `https://www.youtube.com/embed/${m[1]}?rel=0&modestbranding=1` : null;
 }
+
 function playerHTML(url){
   const y = ytEmbed(url);
-  if(y) return ...
-  const y = ytEmbed(url);
   if(y) return `<iframe src="${y}" allow="accelerometer;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen></iframe>`;
-  if(/\.(mp4|webm|mov|m4v)(\?|$)/i.test(url)) return `<video src="${esc(url)}" controls playsinline controlsList="nodownload"></video>`;
+
+  const tg = url.match(/^https?:\/\/t\.me\/(?:s\/)?([A-Za-z0-9_]{5,})\/(\d+)(?:\?.*)?$/i);
+  if(tg) return `<iframe src="https://t.me/${tg[1]}/${tg[2]}?embed=1" allow="autoplay;fullscreen" allowfullscreen></iframe>`;
+
+  if(/\.(mp4|webm|mov|m4v)(\?|$)/i.test(url)) {
+    return `<video src="${esc(url)}" controls playsinline controlsList="nodownload"></video>`;
+  }
+
   return `<iframe src="${esc(url)}" allow="autoplay;fullscreen" allowfullscreen></iframe>`;
 }
+
 const cnt = (s,t='') => (counts[s+'|'+t] || 0);
 
 /* ─── Navigatsiya ─── */
